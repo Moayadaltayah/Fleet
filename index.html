@@ -54,5 +54,21 @@
     <button type="submit">إرسال الطلب</button>
   </form>
 </div>
+<script>
+  // رابط ويبهوك Make.com لحفظ الطلبات في Excel — يُفعَّل عند تعبئته
+  var MAKE_WEBHOOK_URL = "";
+  document.querySelector("form").addEventListener("submit", function (e) {
+    if (!MAKE_WEBHOOK_URL) return;
+    var data = new URLSearchParams();
+    var form = e.target;
+    ["اسم الشركة", "البريد الإلكتروني", "رقم الجوال", "عدد الموظفين"].forEach(function (n) {
+      var el = form.elements[n];
+      if (el) data.append(n, el.value);
+    });
+    try {
+      fetch(MAKE_WEBHOOK_URL, { method: "POST", mode: "no-cors", keepalive: true, body: data });
+    } catch (err) { /* فشل الحفظ في Excel لا يمنع وصول الطلب بالإيميل */ }
+  });
+</script>
 </body>
 </html>
